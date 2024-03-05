@@ -6,7 +6,7 @@ import validator from "validator";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { username, email, password } = body;
+    const { name, email, password } = body;
 
     //cek if email is valid
     if (!validator.isEmail(email)) {
@@ -16,8 +16,8 @@ export async function POST(req) {
       );
     }
 
-    //cek if username less than 5 characters
-    if (username.length < 5) {
+    //cek if name less than 5 characters
+    if (name.length < 5) {
       return NextResponse.json(
         { message: "Username must be at least 5 characters" },
         { status: 400 }
@@ -51,7 +51,7 @@ export async function POST(req) {
     //create user
     const newUser = await db.user.create({
       data: {
-        username,
+        name,
         email,
         password: hashedPassword,
       },
