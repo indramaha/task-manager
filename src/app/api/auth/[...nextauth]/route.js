@@ -10,7 +10,7 @@ export const authOptions = {
   adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 24 * 60 * 60,
   },
   debug: process.env.NODE_ENV,
   secret: process.env.NEXTAUTH_SECRET,
@@ -62,7 +62,7 @@ export const authOptions = {
         return {
           id: existsUser.id,
           email: existsUser.email,
-          username: existsUser.username,
+          name: existsUser.name,
         };
       },
     }),
@@ -76,7 +76,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.username = user.username;
+        token.name = user.name
       }
       return token;
     },
@@ -84,7 +84,8 @@ export const authOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.email = token.email;
-        session.user.username = token.username;
+        session.user.name = token.name;
+        session.user.expires = new Date(session.expires).toLocaleString();
       }
       return session;
     },
