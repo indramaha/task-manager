@@ -1,10 +1,10 @@
 require("dotenv").config();
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import db from "../../../../lib/db";
 import { compare } from "bcrypt";
+import { db } from "@/lib/db";
 
 export const authOptions = {
   adapter: PrismaAdapter(db),
@@ -14,6 +14,10 @@ export const authOptions = {
   },
   debug: process.env.NODE_ENV,
   secret: process.env.NEXTAUTH_SECRET,
+  //page
+  // pages: {
+  //   signIn: "/login",
+  // },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -48,7 +52,7 @@ export const authOptions = {
           existsUser.accounts.length > 0 &&
           existsUser.accounts[0].provider === "google"
         ) {
-          return null
+          return null;
         }
         if (existsUser.password) {
           const passwordMatch = await compare(
@@ -76,7 +80,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.name = user.name
+        token.name = user.name;
       }
       return token;
     },
